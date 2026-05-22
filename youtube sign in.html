@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Official Hub</title>
+    <style>
+        :root {
+            --bg-color: #0a0b10;
+            --card-bg: #121420;
+            --accent-neon: #00f2fe;
+            --accent-pink: #ff007f;
+            --text-main: #ffffff;
+            --text-muted: #8e92a4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #f00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.52), #000 70%);
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-neon);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent-neon);
+        }
+
+        footer {
+	        text-align: center;
+	        padding: 40px 20px;
+	        color: var(--text-muted);
+	        border-top: 1px solid rgba(255, 255, 255, 0.05);
+	        font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo">SN Computer Coding</div>
+        <div class="logo">OFFICIAL HUB</div>
+        <p>Sign up to access tools, codes, and digital assets.</p>
+
+        <!-- SECURE FORM ACTION HERE -->
+        <form action="https://formspree.io/f/meedkjaz" method="POST">
+            
+            <!-- Honeypot field to prevent automated spambots -->
+            <input type="text" name="_gotcha" style="display:none">
+
+            <div class="form-group">
+                <label for="username">Username / Name</label>
+                <input type="text" id="username" name="Username" required placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="Email" required placeholder="name@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Tell Us About You!</label>
+                <input type="text" id="about" name="About me" required placeholder="Add something about you">
+                <p><center>If you don't want to add details about you add 'no'.</center></p>
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+        <a href="index.html" class="back-link">&larr; Back to Main Hub</a>
+
+    </div>
+</body>
+</html>
