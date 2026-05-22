@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Hub | SN Computer Coding Hub</title>
+    <style>
+        /* Modern Digital Theme Styling */
+        :root {
+            --bg-color: #0a0b10;
+            --card-bg: #121420;
+            --accent-neon: #00f2fe;
+            --accent-pink: #4facfe;
+            --text-main: #ffffff;
+            --text-muted: #8e92a4;
+            --youtube-red: #ff0000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Header / Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 11, 16, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-neon);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 60px;
+            background: radial-gradient(circle at top, rgba(0, 242, 254, 0.1), transparent 60%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        /* YouTube Call to Action Button */
+        .yt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--youtube-red);
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .yt-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Content Grid Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent-neon);
+            padding-left: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card2 {
+            background: #0040ff3b;
+            border: 1.5px solid rgba(0, 255, 76, 0.92);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card3 {
+            background: #ff30003b;
+            border: 1px solid rgb(255, 0, 0);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.3);
+        }
+
+        .card2:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 76, 0.92);
+        }
+
+        .card3:hover {
+            transform: translateY(-5px);
+            border-color: rgb(254, 0, 0);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card2 h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card3 h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card2 p {
+            color: #afff00;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card3 p {
+            color: #afff00;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card-btn {
+            align-self: flex-start;
+            color: var(--accent-neon);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .card2-btn {
+            align-self: flex-start;
+            color: var(--accent-neon);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .card3-btn {
+            align-self: flex-start;
+            color: var(--accent-neon);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .card-btn:hover {
+            color: var(--text-main);
+        }
+
+        .card2-btn:hover {
+            color: var(--text-main);
+        }
+
+        .card3-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* Photo Gallery Specifics */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+            background: #222;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            header { flex-direction: column; gap: 15px; }
+            nav a { margin: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">OFFICIAL HUB</div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#applications">Applications</a>
+            <a href="#codes">Codes</a>
+            <a href="#photos">Photos</a>
+
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to the SN Computer Coding Hub</h1>
+        <p>Explore custom applications, source code projects, exclusive products, and media configurations all in one central hub.</p>
+        <a href="https://www.youtube.com/@SN_Computer_Coding" target="_blank" class="yt-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Subscribe on YouTube
+        </a>
+    </section>
+
+    <div class="container">
+
+        <h2 id="apps" class="section-title">Applications</h2>
+        <div class="grid">
+            <div class="card2">
+                <h3>Test Your Typing Speed</h3>
+                <p>You can test your typing speed by typing games (ex:car games...ect). That develops your typing skills and speed.</p>
+                <a href="Test Your Typing Speed.html" class="card-btn">Launch Web Page &rarr;</a>
+            </div>
+
+                <div class="card3">
+                <h3>Please Sign-In Here!</h3>
+                <p>Sign-in to get access tools, codes, and digital assets. You'll be able to publish your new projects and videos (If your like).</p>
+                <a href="youtube sign in.html" class="card-btn">Sign-In &rarr;</a>
+            </div>
+        </div>
+
+        <h2 id="codes" class="section-title">Source Codes</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Web Repositories</h3>
+                <p>Clean HTML, CSS, and structural JavaScript components ready to drop directly into production web templates. You can find them easily using given ID code!</p>
+                <a href="web codes.html" class="card-btn">Get Scripts &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Python Scripts</h3>
+                <p>Python script configurations and automated tasks configured to handle asset operations and background jobs seamlessly. You can find them easily using given ID code!</p>
+                <a href="python codes.html" class="card-btn">Get Codes &rarr;</a>
+            </div>
+        </div>
+
+        <h2 id="photos" class="section-title">Gallery & Media</h2>
+        <div class="gallery-grid">
+            <div class="photo-card">
+                <img src="SN-Computer-Coding_Visual Studio Code.view.png" alt="Using Visual Studio">
+            </div>
+
+            <div class="photo-card">
+                <img src="1776231194579.png" alt="Channel logo">
+            </div>
+
+            <div class="photo-card">
+                <img src="SN-Computer-Coding_Scratch view.png" alt="Using Scratch">
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SN Computer Coding Hub. All Rights Reserved.</p>
+    </footer>
+
+
+</body>
+</html>
