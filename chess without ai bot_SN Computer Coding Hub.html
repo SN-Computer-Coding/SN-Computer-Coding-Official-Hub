@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Ultimate Cyber-Chess | SN Computer Coding Hub | Game Hub</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <link rel="stylesheet" href="chess without ai bot_SN Computer Coding Hub.css">
+</head>
+<body>
+
+    <h1>Cyber Chess</h1>
+    <div class="subtitle">Play locally </div>
+    
+    <div class="game-wrapper">
+        <div id="board-container">
+            <div id="myBoard" style="width: 100%"></div>
+        </div>
+
+        <div class="control-panel">
+            <div class="section-title">Game Mode</div>
+            <select id="gameMode" class="game-mode-selector">
+                <option value="pvp">👥 Pass & Play</option>
+            </select>
+
+            <div class="section-title">Match State</div>
+            <div class="status-container">
+                <div id="status">White to move</div>
+            </div>
+
+            <div class="section-title">Live PGN Move History</div>
+            <div id="moveHistory" class="move-history-box">No moves played yet.</div>
+
+            <div class="btn-group">
+                <button id="resetBtn">🔄 Restart Game</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
+    <script>
+        let game = new Chess();
+        let board = null;
+        let isAiThinking = false;
+
+        const $status = $('#status');
+        const $history = $('#moveHistory');
+        const $gameMode = $('#gameMode');
+
+        function onDragStart(source, piece, position, orientation) {
+            if (game.game_over() || isAiThinking) return false;
+            if ($gameMode.val() === 'ai' && game.turn() === 'b') return false;
+
+            if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+                (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+                return false;
+            }
+        }
+
+        function onDrop(source, target) {
+            let move = game.move({
+                from: source,
+                to: target,
+                promotion: 'q' 
+            });
+
+            if (move === null) return 'snapback';
+
+            updateStatus();
+
+            if ($gameMode.val() === 'ai' && !game.game_over()) {
+                window.setTimeout(triggerAiMove, 250);
+            }
+        }
+
+        function onSnapEnd() {
+            board.position(game.fen());
+        }
+
+        function updateStatus() {
+            let status = '';
+            let moveColor = game.turn() === 'b' ? 'Black' : 'White';
+
+            if (game.in_checkmate()) {
+                status = `💥 Game over! ${moveColor} is in checkmate.`;
+            } else if (game.in_draw()) {
+                status = '🤝 Game over! Position drawn.';
+            } else {
+                status = `${moveColor} to move`;
+                if (game.in_check()) {
+                    status += ' ⚠️ (In Check!)';
+                }
+            }
+
+            $status.html(status);
+            
+            const moves = game.pgn({ max_width: 5, newline_char: '<br />' });
+            $history.html(moves || "No moves played yet.");
+            $history.scrollTop($history[0].scrollHeight);
+        }
+
+        const config = {
+            draggable: true,
+            position: 'start',
+            onDragStart: onDragStart,
+            onDrop: onDrop,
+            onSnapEnd: onSnapEnd,
+            pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
+        };
+
+        board = Chessboard('myBoard', config);
+        updateStatus();
+
+        $('#resetBtn').on('click', function() {
+            game.reset();
+            board.start();
+            isAiThinking = false;
+            updateStatus();
+        });
+
+        $gameMode.on('change', function() {
+            game.reset();
+            board.start();
+            isAiThinking = false;
+            updateStatus();
+        });
+    </script>
+</body>
+</html>

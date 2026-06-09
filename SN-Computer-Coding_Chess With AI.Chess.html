@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyberpunk Web Chess Game</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, rgba(99,102,241,0.22), transparent 22%),
+        linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, rgba(168,85,247,0.2), transparent 18%),
+        radial-gradient(circle at bottom right, rgba(244,63,94,0.14), transparent 20%),
+        linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    .app-shell {
+      width: min(1180px, 100%);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .board-card,
+    .control-panel {
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+      overflow: hidden;
+    }
+
+    .board-card {
+      flex: 1 1 520px;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(99, 102, 241, 0.18);
+    }
+
+    .board-card.check-alert {
+      border-color: #f43f5e;
+      box-shadow: 0 0 28px rgba(244, 63, 94, 0.45), 0 28px 80px rgba(15, 23, 42, 0.28);
+    }
+
+    .board-header,
+    .panel-header {
+      padding: 24px 24px 12px;
+    }
+
+    .board-header h1,
+    .panel-header h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2vw, 2.3rem);
+      letter-spacing: 0.03em;
+      color: #e2e8f0;
+      text-shadow: 0 0 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .board-header p {
+      margin: 12px 0 0;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    #board {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto 24px;
+    }
+
+    .control-panel {
+      flex: 0 0 360px;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .panel-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .select-group,
+    .status-card,
+    .moves-card,
+    .action-card {
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    .select-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #a5b4fc;
+      font-size: 0.95rem;
+    }
+
+    .select-group select {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(99, 102, 241, 0.28);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #e2e8f0;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .select-group select:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+    }
+
+    .status-card h3,
+    .moves-card h3,
+    .action-card h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      color: #c4b5fd;
+      letter-spacing: 0.02em;
+    }
+
+    .status-text {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(99, 102, 241, 0.14), rgba(15, 23, 42, 0.85));
+      color: #e2e8f0;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    .status-text strong {
+      color: #a855f7;
+    }
+
+    .moves-card pre {
+      max-height: 220px;
+      margin: 0;
+      padding: 16px;
+      overflow-y: auto;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.92);
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .moves-card pre::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .moves-card pre::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.42);
+      border-radius: 999px;
+    }
+
+    .action-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .action-card button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      box-shadow: 0 18px 30px rgba(99, 102, 241, 0.24);
+    }
+
+    .action-card button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 36px rgba(99, 102, 241, 0.32);
+    }
+
+    .action-card button.danger {
+      background: linear-gradient(135deg, #f43f5e, #d946ef);
+    }
+
+    .small-hint {
+      color: #94a3b8;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .app-shell {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .control-panel,
+      .board-card {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <section class="board-card" id="boardCard">
+      <div class="board-header">
+        <h1>Cyberpunk Chess</h1>
+        <p>Responsive sci-fi chess with local AI, glassmorphism controls and neon status feedback.</p>
+      </div>
+      <div id="board"></div>
+    </section>
+
+    <aside class="control-panel">
+      <div class="panel-header">
+        <h2>Control Center</h2>
+      </div>
+      <div class="panel-body">
+        <div class="select-group">
+          <label for="modeSelect">Game Mode</label>
+          <select id="modeSelect" aria-label="Game Mode Selector">
+            <option value="pass">👥 Pass & Play</option>
+            <option value="ai" selected>🤖 VS Computer Bot</option>
+          </select>
+          <p class="small-hint">Switch between two-player pass-and-play and a smart local bot.</p>
+        </div>
+
+        <div class="status-card">
+          <h3>Match Status</h3>
+          <div class="status-text" id="statusText">Initializing board state...</div>
+        </div>
+
+        <div class="moves-card">
+          <h3>Move History</h3>
+          <pre id="moveList">No moves yet. Start the first attack.</pre>
+        </div>
+
+        <div class="action-card">
+          <button id="restartButton" type="button">🔄 Restart Game</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const game = new Chess();
+    let board = null;
+    let currentMode = 'ai';
+    const boardCard = document.getElementById('boardCard');
+    const statusText = document.getElementById('statusText');
+    const moveList = document.getElementById('moveList');
+    const modeSelect = document.getElementById('modeSelect');
+    const restartButton = document.getElementById('restartButton');
+
+    function initBoard() {
+      board = Chessboard('board', {
+        draggable: true,
+        position: game.fen(),
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+        onDragStart: handleDragStart,
+        onDrop: handleDrop,
+        onSnapEnd: handleSnapEnd,
+      });
+      updateStatus();
+    }
+
+    function handleDragStart(source, piece) {
+      if (game.game_over()) {
+        return false;
+      }
+
+      if (currentMode === 'ai' && piece.charAt(0) === 'b') {
+        return false;
+      }
+
+      return true;
+    }
+
+    function handleDrop(source, target) {
+      const move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q',
+      });
+
+      if (move === null) {
+        return 'snapback';
+      }
+
+      board.position(game.fen());
+      updateStatus();
+
+      if (currentMode === 'ai' && !game.game_over() && game.turn() === 'b') {
+        setTimeout(botMove, 450);
+      }
+    }
+
+    function handleSnapEnd() {
+      board.position(game.fen());
+    }
+
+    function updateStatus() {
+      const activeColor = game.turn() === 'w' ? 'White' : 'Black';
+      let status = '';
+
+      if (game.in_checkmate()) {
+        const winner = game.turn() === 'w' ? 'Black' : 'White';
+        status = `💥 Checkmate / Game Over! ${winner} wins.`;
+      } else if (game.in_draw()) {
+        status = '🟣 Stalemate / Draw detected. Restart to continue.';
+      } else {
+        if (currentMode === 'ai') {
+          if (game.turn() === 'w') {
+            status = '👤 Your move. White to move.';
+          } else {
+            status = '🤖 Computer is thinking. Black to move.';
+          }
+        } else {
+          status = `👥 ${activeColor} to move. Pass & Play mode.`;
+        }
+
+        if (game.in_check()) {
+          status = `⚠️ ${activeColor} is in Check! ${activeColor} must react.`;
+        }
+      }
+
+      statusText.textContent = status;
+      boardCard.classList.toggle('check-alert', game.in_check());
+      updateMoveLog();
+    }
+
+    function updateMoveLog() {
+      const history = game.history();
+      if (history.length === 0) {
+        moveList.textContent = 'No moves yet. Start the first attack.';
+        return;
+      }
+
+      let formatted = '';
+      for (let i = 0; i < history.length; i += 2) {
+        const moveNumber = Math.floor(i / 2) + 1;
+        const whiteMove = history[i];
+        const blackMove = history[i + 1] || '';
+        formatted += `${moveNumber}. ${whiteMove}${blackMove ? ' ' + blackMove : ''}\n`;
+      }
+
+      moveList.textContent = formatted.trim();
+      moveList.scrollTop = moveList.scrollHeight;
+    }
+
+    function botMove() {
+      const legalMoves = game.moves({ verbose: true });
+      if (legalMoves.length === 0) {
+        updateStatus();
+        return;
+      }
+
+      const priorityMoves = legalMoves.filter((m) => m.captured || m.san.includes('+') || m.san.includes('#'));
+      const chosenMove = priorityMoves.length > 0
+        ? priorityMoves[Math.floor(Math.random() * priorityMoves.length)]
+        : legalMoves[Math.floor(Math.random() * legalMoves.length)];
+
+      game.move({
+        from: chosenMove.from,
+        to: chosenMove.to,
+        promotion: 'q',
+      });
+
+      board.position(game.fen());
+      updateStatus();
+    }
+
+    function restartGame() {
+      game.reset();
+      board.position(game.fen());
+      updateStatus();
+    }
+
+    modeSelect.addEventListener('change', () => {
+      currentMode = modeSelect.value;
+      restartGame();
+    });
+
+    restartButton.addEventListener('click', () => {
+      restartGame();
+    });
+
+    initBoard();
+  </script>
+</body>
+</html>
